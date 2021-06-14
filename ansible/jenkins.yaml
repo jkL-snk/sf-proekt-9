@@ -5,7 +5,7 @@
   become: true
   tasks:
     - name: Install packages and dependencies
-      apt: name={{ item }} update_cache={{ update_apt_cache }} state=present
+      apt: name={{ item }} update_cache=yes state=present
       with_items:
       - openjdk-8-jdk  # this specific version is needed for Jenkins to run
       - libfontconfig
