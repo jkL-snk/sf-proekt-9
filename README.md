@@ -32,6 +32,21 @@
 
 Выполнение:
 
+Вам потребуется заменить публичный ключ в terraform/meta.yml на свой и иметь закрытую часть ключа.
+
 git clone https://github.com/jkL-snk/sf-pract-12-webinar.git
+
 cd ./sf-pract-12-webinar/terraform
+
 terraform init
+
+terraform apply
+
+cd ..
+
+cd ansible
+
+ssh-agent bash
+ssh-add ~/.ssh/id_rsa
+
+ansible-playbook ssh.yaml -i inventory.ini

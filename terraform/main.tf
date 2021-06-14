@@ -14,7 +14,7 @@ provider "yandex" {
 }
 
 resource "yandex_compute_instance" "jenkins" {
-  name = "terraform1"
+  name = "jenkins"
 
   resources {
     cores  = 2
@@ -30,7 +30,7 @@ resource "yandex_compute_instance" "jenkins" {
   }
 
   network_interface {
-    subnet_id = yandex_vpc_subnet.subnet-1.id
+    subnet_id = yandex_vpc_subnet.subnet-12-web.id
     nat       = true
   }
 
@@ -41,7 +41,7 @@ resource "yandex_compute_instance" "jenkins" {
 }
 
 resource "yandex_compute_instance" "worker-1" {
-  name = "terraform2"
+  name = "worker-1"
 
   resources {
     cores  = 2
@@ -57,7 +57,7 @@ resource "yandex_compute_instance" "worker-1" {
   }
 
   network_interface {
-    subnet_id = yandex_vpc_subnet.subnet-1.id
+    subnet_id = yandex_vpc_subnet.subnet-12-web.id
     nat       = true
   }
 
@@ -67,7 +67,7 @@ resource "yandex_compute_instance" "worker-1" {
 }
 
 resource "yandex_compute_instance" "worker-2" {
-  name = "terraform2"
+  name = "worker-2"
 
   resources {
     cores  = 2
@@ -83,7 +83,7 @@ resource "yandex_compute_instance" "worker-2" {
   }
 
   network_interface {
-    subnet_id = yandex_vpc_subnet.subnet-1.id
+    subnet_id = yandex_vpc_subnet.subnet-12-web.id
     nat       = true
   }
 
@@ -93,11 +93,11 @@ resource "yandex_compute_instance" "worker-2" {
 }
 
 resource "yandex_vpc_network" "network-1" {
-  name = "network1"
+  name = "network12-web"
 }
 
-resource "yandex_vpc_subnet" "subnet-1" {
-  name           = "subnet1"
+resource "yandex_vpc_subnet" "subnet-12-web" {
+  name           = "subnet12web"
   zone           = "ru-central1-a"
   network_id     = yandex_vpc_network.network-1.id
   v4_cidr_blocks = ["192.168.10.0/24"]
@@ -117,7 +117,7 @@ output "internal_ip_address_worker_2" {
 
 
 output "external_ip_address_jenkins" {
-  value = yandex_compute_instance.vjenkins.network_interface.0.nat_ip_address
+  value = yandex_compute_instance.jenkins.network_interface.0.nat_ip_address
 }
 
 output "external_ip_address_worker_1" {
@@ -128,4 +128,14 @@ output "external_ip_address_worker_2" {
   value = yandex_compute_instance.worker-2.network_interface.0.nat_ip_address
 }
 
-      
+# generate inventory file for Ansible
+resource "local_file" "inventory" {
+  content = templatefile("${path.module}/hosts.tpl",
+    {
+      jenkins = yandex_compute_instance.jenkins.network_interface.*.nat_ip_address
+      workers1 = yandex_compute_instance.worker-1.network_interface.*.nat_ip_address
+      workers2 = yandex_compute_instance.worker-2.network_interface.*.nat_ip_address
+    }
+  )
+  filename = "../ansible/inventory.ini"
+}      
