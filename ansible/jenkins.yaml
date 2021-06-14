@@ -4,11 +4,6 @@
   gather_facts: false
   become: true
   tasks:
-    - name: prereqs
-      apt:
-        name:
-          - wget
-          - java-1.8.0-openjdk
  
     - name: ensure the jenkins apt repository key is installed
       apt_key: url=https://pkg.jenkins.io/debian-stable/jenkins.io.key state=present
