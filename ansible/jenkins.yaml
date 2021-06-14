@@ -7,7 +7,8 @@
     - name: Install packages and dependencies
       apt: name={{ item }} update_cache=yes state=present
       with_items:
-      - openjdk-8-jdk  # this specific version is needed for Jenkins to run
+      - default-jre
+      - pip 
       - libfontconfig
       - libffi-dev
       - libncurses5-dev
@@ -25,13 +26,7 @@
  
     - name: ensure jenkins is running
       service: name=jenkins state=started
-    - name: Install additional Python packages
-      pip: name={{ item }} state=latest
-      with_items:
-      - ansible
-      - boto
-      - flake8
-      - passlib
+ 
     - name: Sleep for 30 seconds and continue with play
       wait_for: timeout=30
  
