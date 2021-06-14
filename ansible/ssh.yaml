@@ -1,6 +1,7 @@
 ---
 - name: Exchange Keys between servers
   hosts: all
+  become: yes
   tasks:
     - name: SSH KeyGen command
       tags: run
