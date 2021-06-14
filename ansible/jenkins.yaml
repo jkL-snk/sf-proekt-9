@@ -1,0 +1,12 @@
+---
+- hosts: jenkins
+  become: true
+  
+  vars:
+    jenkins_hostname: {{inventory_hostname}}
+    java_packages:
+      - openjdk-8-jdk
+
+  roles:
+    - role: geerlingguy.java
+    - role: geerlingguy.jenkins
