@@ -4,7 +4,13 @@
   gather_facts: false
   become: true
   tasks:
- 
+    - name: Install packages and dependencies
+      apt: name={{ item }} update_cache={{ update_apt_cache }} state=present
+      with_items:
+      - openjdk-8-jdk  # this specific version is needed for Jenkins to run
+      - libfontconfig
+      - libffi-dev
+      - libncurses5-dev
     - name: ensure the jenkins apt repository key is installed
       apt_key: url=https://pkg.jenkins.io/debian-stable/jenkins.io.key state=present
       become: yes
@@ -19,7 +25,13 @@
  
     - name: ensure jenkins is running
       service: name=jenkins state=started
- 
+    - name: Install additional Python packages
+      pip: name={{ item }} state=latest
+      with_items:
+      - ansible
+      - boto
+      - flake8
+      - passlib
     - name: Sleep for 30 seconds and continue with play
       wait_for: timeout=30
  
