@@ -14,7 +14,11 @@
         src: "~/.ssh/id_rsa.pub"
         dest: "buffer/{{inventory_hostname}}-id_rsa.pub"
         flat: yes
-
+    
+    - name: "Create user accounts"
+      user:
+        name: "jenkins"
+    
     - name: Copy the key add to authorized_keys using Ansible module
       tags: runcd
       authorized_key:
