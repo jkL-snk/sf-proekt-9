@@ -18,7 +18,7 @@
     - name: Copy the key add to authorized_keys using Ansible module
       tags: runcd
       authorized_key:
-        user: meo
+        user: jenkins
         state: present
         key: "{{ lookup('file','buffer/{{item}}-id_rsa.pub')}}"
       when: "{{ item != ansible_hostname }}"
