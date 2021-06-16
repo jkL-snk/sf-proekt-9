@@ -42,6 +42,8 @@ terraform init
 
 terraform apply
 
+Полученные IP-адреса хостов прописать в ansible/inventory.ini
+
 cd ..
 
 cd ansible
@@ -50,3 +52,8 @@ ssh-agent bash
 ssh-add ~/.ssh/id_rsa
 
 ansible-playbook ssh.yaml -i inventory.ini
+ansible-playbook docker.yaml -i inventory.ini
+ansible-playbook jenkins.yaml -i inventory.ini
+
+Использовать полученный пароль для входа в веб-интерфейс Jenkins
+

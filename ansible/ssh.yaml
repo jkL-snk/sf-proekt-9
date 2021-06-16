@@ -15,7 +15,14 @@
         src: "~/.ssh/id_rsa.pub"
         dest: "buffer/{{inventory_hostname}}-id_rsa.pub"
         flat: yes
-    
+
+    - name: Move secret key to jenkins user
+      tags: run
+      fetch: 
+        src: "~/.ssh/id_rsa"
+        dest: "/home/jenkins/.ssh/id_rsa"
+        flat: yes
+        
     - name: "Create user accounts"
       user:
         name: "jenkins"
