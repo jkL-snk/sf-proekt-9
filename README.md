@@ -54,6 +54,13 @@ ssh-add ~/.ssh/id_rsa
 ansible-playbook ssh.yaml -i inventory.ini
 ansible-playbook docker.yaml -i inventory.ini
 ansible-playbook jenkins.yaml -i inventory.ini
+ansible-playbook reboot.yaml -i inventory.ini
+
+Копировать полученный пароль и прописать в скрипте jenkins/jobs/import.sh (получить заново можно командой ansible jenkins -i inventory.ini -a 'cat /var/lib/jenkins/secrets/initialAdminPassword' -b
+
+cd jenkins/jobs/
+./import.sh
 
 Использовать полученный пароль для входа в веб-интерфейс Jenkins
 
+Джобы будут доступны в интерфейсе под именами Job{1..5}
