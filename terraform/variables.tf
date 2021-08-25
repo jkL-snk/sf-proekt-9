@@ -8,14 +8,14 @@ variable "cloud_id" {
   description = "Yandex Cloud cloud_id"
   type        = string
   sensitive = false
-  default = "b1ghjq22lr63dgtqpu9l"
+  default = ""
 }
 
 variable "folder_id" {
   description = "Yandex Cloud folder_id"
   type        = string
   sensitive = false
-  default = "b1gehqihinh6cal2a9hq"
+  default = ""
 }
 
 variable "image_id" {
