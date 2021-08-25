@@ -1,66 +1,59 @@
-Практические задания после вебинара
-Цель практики: научиться поднимать конвейер для автоматизации деплоймента в два рабочих окружения проекта.
+# Webinar homework
 
-Задание 12.1
-Разверните сервер с Jenkins CI и две дополнительные машины, которые будут эмулировать production и stating окружения.
+## Practice task: learn how to make a pipeline to automate deployment to different project environments.
 
-Задание 12.2
-Используйте Ansible для создания деплоймента: все три машины должны разворачиваться на основе ansible playbook.
+### Task 12.1
+Create a VM with Jenkins CI installed and two another vms that will emulate production and staging environments.
 
-Задание 12.3
-На все машины установите Docker. На машине с Jenkins настройте Docker, чтобы контейнеры могли запускаться от имени пользователя Jenkins.
+### Task 12.2
+Use Ansible to deploy vms: all three machines to be deployed using ansible playbook.
 
-Задание 12.4
-Машина Jenkins CI должна уметь «ходить» по ssh от имени Jenkins на машины production и staging. Идеально, если добавление ключей к целевым машинам настроено уже в ansible playbook.
+### Task 12.3
+Install Docker on all VMs. The Jenkins VM should be able to run docker containers under jenkins user.
 
-Задание 12.5
-Когда будут развернуты все три машины, настройте в Jenkins 5 джоб (job):
+### Task 12.4
+Jenkins vm should be able to connect via ssh to product and staging environment vsm. Key distribution preferrably should be included in the playbook.
 
-Запуск контейнера с WordPress на staging-машине.
-Запуск контейнера с WordPress на production-машине.
-Джоба с использованием планировщика, где раз в 5 минут скрипт проверяет, пингуются ли production и staging серверы.
-Джоба, которая выполняет получение данных uptime с production и staging.
-Джоба, которая выполняет перезагрузку production и staging с возможность выбора одной из них или всех сразу (build with params). 
-*Задания повышенной сложности
-Выполните задания 12.6 и 12.7 и отправьте решения на проверку.
+### Task 12.5
+After all 3 vms are deployed create 5 jobs in Jenkins:
 
-Задание 12.6
-Настройку Job вынести в Jenkinsfile и сформировать как Pipeline.
+Run Wordpress containder on staging VM.
+Run Wordpress containder on production VM.
+Job with scheduled task that each 5 minutes pings prod and staging vms.
+Job that gets uptime info from prod and staging vms.
+Job that reboots prod or staging vms or both (depends on arguments).
 
-Задание 12.7
-Каждую Job хранить в репозитории и целевую Job вытаскивать с помощью клонирования конкретного git branch.
+## Solution:
 
-Выполнение:
+Change public key in terraform/meta.yml
 
-Вам потребуется заменить публичный ключ в terraform/meta.yml на свой и иметь закрытую часть ключа.
-
+```
 git clone https://github.com/jkL-snk/sf-pract-12-webinar.git
-
 cd ./sf-pract-12-webinar/terraform
-
 terraform init
-
 terraform apply
+```
 
-Полученные IP-адреса хостов прописать в ansible/inventory.ini
+Write external ips from terrafrom output to ansible/inventory.ini
 
+```
 cd ..
-
 cd ansible
-
 ssh-agent bash
 ssh-add ~/.ssh/id_rsa
-
 ansible-playbook ssh.yaml -i inventory.ini
 ansible-playbook docker.yaml -i inventory.ini
 ansible-playbook jenkins.yaml -i inventory.ini
 ansible-playbook reboot.yaml -i inventory.ini
+```
 
-Копировать полученный пароль и прописать в скрипте jenkins/jobs/import.sh (получить заново можно командой ansible jenkins -i inventory.ini -a 'cat /var/lib/jenkins/secrets/initialAdminPassword' -b
+Write password from output into jenkins/jobs/import.sh (you can get in again by running ansible jenkins -i inventory.ini -a 'cat /var/lib/jenkins/secrets/initialAdminPassword' -b
 
+```
 cd jenkins/jobs/
 ./import.sh
+```
 
-Использовать полученный пароль для входа в веб-интерфейс Jenkins
+Use the password to login into Jenkins web interface
 
-Джобы будут доступны в интерфейсе под именами Job{1..5}
+Jobs will be available under names Job{1..5}
