@@ -20,7 +20,7 @@ EOF
 git clone https://github.com/jkL-snk/sf-proekt-8.git
 cd ./sf-proekt-8/terraform
 terraform init
-terraform apply
+terraform apply --var-file-private.tfvars
 ```
 
 Write external ip from terraform output to ansible/inventory.ini
