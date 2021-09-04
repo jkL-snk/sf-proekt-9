@@ -23,7 +23,7 @@ terraform init
 terraform apply --var-file-private.tfvars
 ```
 
-Write external ip from terraform output to ansible/inventory.ini
+External ip from terraform output will be written to ansible/inventory.ini
 
 ```
 cd ..
