@@ -15,10 +15,11 @@ cloud_id  = "<your yandex cloud id>"
 folder_id = "<your yandex cloud folder id>"
 EOF
 ```
+or use private.tfvars.example
 
 ```
-git clone https://github.com/jkL-snk/sf-proekt-8.git
-cd ./sf-proekt-8/terraform
+git clone https://github.com/jkL-snk/sf-proekt-9.git
+cd ./sf-proekt-9/terraform
 terraform init
 terraform apply --var-file-private.tfvars
 ```
