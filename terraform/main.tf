@@ -13,8 +13,21 @@ provider "yandex" {
   zone      = "ru-central1-a"
 }
 
-resource "yandex_compute_instance" "jenkins" {
-  name = "jenkins"
+# commented out to not max out on vpc network quota
+
+#resource "yandex_vpc_network" "this" {
+#  name = "default" 
+#}
+
+resource "yandex_vpc_subnet" "this" {
+  name           = "sf-proekt-9"
+  zone           = "ru-central1-a"
+  network_id     = "enp1rcsgq9dhq3btkgj1" #yandex_vpc_network.this.id to use newly created network
+  v4_cidr_blocks = ["192.168.10.0/24"]
+}
+resource "yandex_compute_instance" "worker" {
+  
+  name = "worker"
 
   resources {
     cores  = 2
@@ -25,12 +38,12 @@ resource "yandex_compute_instance" "jenkins" {
   boot_disk {
     initialize_params {
       image_id = var.image_id
-      size        = 25
+      size        = 20
     }
   }
 
   network_interface {
-    subnet_id = yandex_vpc_subnet.subnet-pr-8.id
+    subnet_id = yandex_vpc_subnet.this.id
     nat       = true
   }
 
@@ -40,30 +53,23 @@ resource "yandex_compute_instance" "jenkins" {
   
 }
 
-resource "yandex_vpc_network" "network-pr-8" {
-  name = "network-pr-8"
+
+
+output "internal_ip_address_worker" {
+  value = yandex_compute_instance.worker.network_interface.0.ip_address
 }
 
-resource "yandex_vpc_subnet" "subnet-pr-8" {
-  name           = "subnet-pr-8"
-  zone           = "ru-central1-a"
-  network_id     = yandex_vpc_network.network-pr-8.id
-  v4_cidr_blocks = ["192.168.10.0/24"]
-}
-
-output "internal_ip_address_jenkins" {
-  value = yandex_compute_instance.jenkins.network_interface.0.ip_address
-}
-
-output "external_ip_address_jenkins" {
-  value = yandex_compute_instance.jenkins.network_interface.0.nat_ip_address
+output "external_ip_address_worker" {
+  value = yandex_compute_instance.worker.network_interface.0.nat_ip_address
 }
 
 # generate inventory file for Ansible
+# add instances here
+# modify hosts.tpl with variables from here
 resource "local_file" "inventory" {
   content = templatefile("${path.module}/hosts.tpl",
     {
-      jenkins = yandex_compute_instance.jenkins.network_interface.*.nat_ip_address
+      worker = yandex_compute_instance.worker.network_interface.*.nat_ip_address
     }
   )
   filename = "../ansible/inventory.ini"

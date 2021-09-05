@@ -4,6 +4,7 @@
 provider "registry.terraform.io/hashicorp/local" {
   version = "2.1.0"
   hashes = [
+    "h1:/OpJKWupvFd8WJX1mTt8vi01pP7dkA6e//4l4C3TExE=",
     "h1:EYZdckuGU3n6APs97nS2LxZm3dDtGqyM4qaIvsmac8o=",
     "zh:0f1ec65101fa35050978d483d6e8916664b7556800348456ff3d09454ac1eae2",
     "zh:36e42ac19f5d68467aacf07e6adcf83c7486f2e5b5f4339e9671f68525fc87ab",
@@ -22,6 +23,7 @@ provider "registry.terraform.io/hashicorp/local" {
 provider "registry.terraform.io/yandex-cloud/yandex" {
   version = "0.61.0"
   hashes = [
+    "h1:CxcE4lFiOXMB7T4ZD31C69SpxZspv9LkUZl/4uAk5tQ=",
     "h1:hPOtT0blpx3w2CVdb3DFxBEsuU9cPW9fT1TmajL/ymI=",
     "zh:0b86997686aee3b482fbbcbcd924b93f40211b3b9cf274e64a893c05f79a8379",
     "zh:0de9ca24cf0bebe4bf85c498249a1af7e327478f61e768e3ddf5476da3818c8e",

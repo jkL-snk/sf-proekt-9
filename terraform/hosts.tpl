@@ -1,4 +1,4 @@
-[jenkins]
-%{ for ip in jenkins ~}
+[worker]
+%{ for ip in worker ~}
 ${ip}
 %{ endfor ~}
