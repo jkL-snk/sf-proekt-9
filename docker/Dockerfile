@@ -1,11 +1,7 @@
-FROM python:3.8-alpine as base
-FROM base as builder
-RUN mkdir /install
-WORKDIR /install
-COPY requirements.txt /requirements.txt
-RUN pip install --install-option="--prefix=/install" -r /requirements.txt
-FROM base
-COPY --from=builder /install /usr/local
-COPY app /svr/
+FROM python:3.8-slim-buster
+COPY requirements.txt ./requirements.txt
+RUN pip3 install -r ./requirements.txt
+COPY app/ /svr/app/
 WORKDIR /svr/app
+EXPOSE 80
 CMD ["python", "web.py"]
